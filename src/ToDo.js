@@ -180,7 +180,7 @@ const ToDoList = (function () {
     }
 
     const _editDueDate = (element, stickyObject, property) => {
-        const [parent, input] = _editElement(element, stickyObject, property)
+        const [parent, input] = _editElement(element, property)
 
         input.type = "date"
         input.value = _isoFormat(stickyObject[property])
