@@ -74,6 +74,8 @@ const ToDoList = (function () {
     const _stickyContainer = document.createElement("div")
     _stickyContainer.id = "container"
 
+    const _NO_DUE_DATE = "No Due Date"
+
     const _defaultSticky = new ToDo(
         "To-Do List!",
         "Check out my notes to see how to make a sticky note!",
@@ -101,7 +103,12 @@ const ToDoList = (function () {
     const _createDueDate = dueDate => {
         const dueDateElement = document.createElement("div")
         dueDateElement.className = "dueDate"
-        dueDateElement.textContent = "Due: " + _formatDueDate(dueDate)
+
+        if (dueDate === _NO_DUE_DATE) {
+            dueDateElement.textContent = dueDate
+        } else {
+            dueDateElement.textContent = "Due: " + _formatDueDate(dueDate)
+        }
 
         return dueDateElement
     }
@@ -143,11 +150,30 @@ const ToDoList = (function () {
     }
 
     const _createIsChecked = isChecked => {
-        const isCheckedElement = document.createElement("div")
-        isCheckedElement.className = "isChecked"
-        isCheckedElement.textContent = isChecked
+        const isCheckedElement = document.createElement("i")
+        
+        if(isChecked){
+            isCheckedElement.className = "fas fa-check-square"
+            isCheckedElement.classList.add("checked")
+        } else {
+            isCheckedElement.className = "far fa-check-square"
+        }
+
+        // <i class="fas fa-check-square"></i>
+        // <i class="far fa-check-square"></i>
+
+        isCheckedElement.classList.add("isChecked")
 
         return isCheckedElement
+    }
+
+    const _checkInput = event => {
+        return event.keyCode == 13 || event.which == 13
+    }
+
+    const _isEmpty = input => {
+        console.log(input.value)
+        return input.value == ""
     }
 
     // this is just a helper function for similarities amongst other edit functions
@@ -162,14 +188,21 @@ const ToDoList = (function () {
 
     const _editText = (element, stickyObject, property) => {
         const [parent, input] = _editElement(element, property)
+        const id = `${element.textContent} ${property}`.split(' ').join('-')
 
         input.value = element.textContent
         input.type = "text"
+        input.id = id
 
         input.onkeypress = function (e) {
             // if user hits enter
-            if (e.keyCode == 13 | e.which == 13) {
+            if (_checkInput(e) && !_isEmpty(input)) {
                 element.textContent = input.value
+                parent.replaceChild(element, input)
+
+                stickyObject[property] = element.textContent
+            } else if (_checkInput(e) && _isEmpty(input)) {
+                element.textContent = `No ${property}`
                 parent.replaceChild(element, input)
 
                 stickyObject[property] = element.textContent
@@ -177,26 +210,45 @@ const ToDoList = (function () {
         }
 
         parent.replaceChild(input, element)
+
+        // focus on element, places cursor right into the input 
+        document.getElementById(id).focus()
     }
 
     const _editDueDate = (element, stickyObject, property) => {
         const [parent, input] = _editElement(element, property)
 
         input.type = "date"
-        input.value = _isoFormat(stickyObject[property])
+
+        if (stickyObject[property] === _NO_DUE_DATE) {
+            input.value = _isoFormat(new Date())
+        } else {
+            input.value = _isoFormat(stickyObject[property])
+        }
+
+        const id = `${input.value} ${property}`.split(' ').join('-')
+        input.id = id
 
         input.onkeypress = function (e) {
             // if user hits enter
-            if (e.keyCode == 13 | e.which == 13) {
+            if (_checkInput(e) && !_isEmpty(input)) {
                 const newDate = _parseDate(input.value)
                 element.textContent = "Due: " + _formatDueDate(newDate)
                 parent.replaceChild(element, input)
 
                 stickyObject[property] = newDate
+            } else if (_checkInput(e) && _isEmpty(input)) {
+                element.textContent = _NO_DUE_DATE
+                parent.replaceChild(element, input)
+
+                stickyObject[property] = _NO_DUE_DATE
             }
         }
 
         parent.replaceChild(input, element)
+
+        // focus on element, places cursor right into the input 
+        document.getElementById(id).focus()
     }
 
     const _createSticky = stickyObject => {

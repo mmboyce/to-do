@@ -13,7 +13,11 @@ body {
     display: grid;
     grid-auto-flow: row dense;
     width: 75%;
-    margin-left: 10%;
+    margin-left: 10em;
+}
+
+.empty {
+    color: gray;
 }
 
 #sideBar {
@@ -25,7 +29,7 @@ body {
     top: 0;
     left: 0;
     margin: 0;
-    border-right: 2px solid black;
+    margin-right: 1em;
     box-shadow: 2px 0 6px black;
 }
 
@@ -35,9 +39,12 @@ body {
 
 .sticky {
     display: flex;
-    flex-direction: column;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
     background: yellow;
     padding: 3em 2em;
+    width: 600px;
+    height: 240px;
     margin: 1em;
     box-shadow: 0.5em 0.5em red;
 }
@@ -52,6 +59,10 @@ body {
     font-weight: bold;
     font-size: 2.2em;
     order: 1;
+    flex: 0 0 5%;
+    text-align: center;
+    align-self: baseline;
+    margin-right: 10px;
 }
 
 .isPriority:hover {
@@ -67,30 +78,56 @@ body {
 }
 
 .title {
-    order: 2;
+    order: 3;
     font-size: 2em;
     font-weight: bold;
     margin-bottom: 0.6em;
+    flex: 0 0 100%;
+    align-self: flex-start;
 }
 
 .description {
     font-size: 1.3em;
-    order: 2;
+    order: 3;
+    flex: 0 0 100%;
+    align-self: flex-start;
 }
 
 .dueDate {
     font-size: 1.25em;
-    order: 1;
+    order: 2;
+    flex: 1 0 85%;
+    align-self: flex-start;
 }
 
 .notes {
     margin-top: 0.6em;
-    order: 2;
+    order: 4;
     font-size: 1.15em;
+    align-self: flex-start;
+    flex: 0 0 100%;
 }
 
 .isChecked {
-    order: 0;
+    /* This doesn't necesarrily mean isChecked is true, just refers to its bos */
+    order: 5;
+    align-self: flex-end;
+    flex: 0 0 5%;
+    color: gray;
+    font-size: 1.5em;
+}
+
+.isChecked:hover {
+    color: red;
+}
+
+.checked {
+    /* This is for when the checkbox is true */
+    color: red;
+}
+
+.checked:hover {
+    color: gray;
 }
 
 .description, .isChecked, .description, .title, .notes, .dueDate {
@@ -104,8 +141,31 @@ body {
     width: 0.6em;
     height: 1em;
     order: 0;
+    flex: 0 0 1%;
+    margin-top: 4px;
+    align-self: flex-start;
 }
 
 .remove:hover {
     background: red;
+}
+
+@media only screen and (max-width: 600px) {
+    #content {
+        flex-direction: column;
+    }
+    #sideBar {
+        width: 100%;
+        height: max-content;
+        flex-direction: row;
+        box-shadow: 0 2px 6px black;
+    }
+    #container {
+        margin-top: 5em;
+        margin-left: 1em;
+        width: 80%;
+    }
+    .sticky {
+        padding: 1.2em 1em;
+    }
 }
