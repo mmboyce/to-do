@@ -3,17 +3,21 @@ import { format } from 'date-fns'
 const ToDoList = (function () {
 
     class ToDo {
-        constructor(title, description, dueDate, priority, notes, isChecked) {
+        constructor(title, description, dueDate, isPriority, notes, isChecked) {
             this.title = title
             this.description = description
             this.dueDate = dueDate //date-fns
-            this.priority = priority // 0-3 stars
+            this.isPriority = isPriority // Boolean Value
             this.notes = notes
             this.isChecked = isChecked // Boolean Value
         }
 
         toggleIsChecked() {
             this.isChecked = !this.isChecked
+        }
+
+        toggleIsPriority() {
+            this.isPriority = !this.isPriority
         }
 
         get title() {
@@ -28,8 +32,8 @@ const ToDoList = (function () {
             return this._dueDate
         }
 
-        get priority() {
-            return this._priority
+        get isPriority() {
+            return this._isPriority
         }
 
         get notes() {
@@ -52,8 +56,8 @@ const ToDoList = (function () {
             this._dueDate = value
         }
 
-        set priority(value) {
-            this._priority = value
+        set isPriority(value) {
+            this._isPriority = value
         }
 
         set notes(value) {
@@ -74,16 +78,44 @@ const ToDoList = (function () {
         "To-Do List!",
         "Check out my notes to see how to make a sticky note!",
         new Date(),
-        3,
-        "Click the plus button to create a new sticky note to log your to-dos!",
+        true,
+        "You can click on any part of a post it to edit it! Just hit enter to save :)",
         false)
 
-    const _createPriority = priority => {
-        const priorityElement = document.createElement("div")
-        priorityElement.className = "priority"
-        priorityElement.textContent = priority
+    const _createTitle = title => {
+        const titleElement = document.createElement("div")
+        titleElement.className = "title"
+        titleElement.textContent = title
 
-        return priorityElement
+        return titleElement
+    }
+
+    const _createDescription = description => {
+        const descriptionElement = document.createElement("div")
+        descriptionElement.className = "description"
+        descriptionElement.textContent = description
+
+        return descriptionElement
+    }
+
+    const _createDueDate = dueDate => {
+        const dueDateElement = document.createElement("div")
+        dueDateElement.className = "dueDate"
+        dueDateElement.textContent = "Due: " + _formatDueDate(dueDate)
+
+        return dueDateElement
+    }
+
+    const _createIsPriority = isPriority => {
+        const isPriorityElement = document.createElement("div")
+        isPriorityElement.className = "isPriority"
+        isPriorityElement.textContent = "!"
+
+        if (!isPriority) {
+            isPriorityElement.classList.toggle("isNotPriority")
+        }
+
+        return isPriorityElement
     }
 
     const _createNotes = notes => {
@@ -99,6 +131,17 @@ const ToDoList = (function () {
         return format(dueDate, 'dd-MMM-yyyy')
     }
 
+    const _isoFormat = dueDate => {
+        return format(dueDate, 'yyyy-MM-dd')
+    }
+
+    const _parseDate = isoDate => {
+        const [year, month, day] = isoDate.split("-")
+
+        // subtract 1 from month because js months are 0-11 :/
+        return new Date(year, month - 1, day)
+    }
+
     const _createIsChecked = isChecked => {
         const isCheckedElement = document.createElement("div")
         isCheckedElement.className = "isChecked"
@@ -107,23 +150,66 @@ const ToDoList = (function () {
         return isCheckedElement
     }
 
+    // this is just a helper function for similarities amongst other edit functions
+    const _editElement = (element, property) => {
+        const parent = element.parentNode
+
+        const input = document.createElement("input")
+        input.className = property
+
+        return [parent, input]
+    }
+
+    const _editText = (element, stickyObject, property) => {
+        const [parent, input] = _editElement(element, property)
+
+        input.value = element.textContent
+        input.type = "text"
+
+        input.onkeypress = function (e) {
+            // if user hits enter
+            if (e.keyCode == 13 | e.which == 13) {
+                element.textContent = input.value
+                parent.replaceChild(element, input)
+
+                stickyObject[property] = element.textContent
+            }
+        }
+
+        parent.replaceChild(input, element)
+    }
+
+    const _editDueDate = (element, stickyObject, property) => {
+        const [parent, input] = _editElement(element, stickyObject, property)
+
+        input.type = "date"
+        input.value = _isoFormat(stickyObject[property])
+
+        input.onkeypress = function (e) {
+            // if user hits enter
+            if (e.keyCode == 13 | e.which == 13) {
+                const newDate = _parseDate(input.value)
+                element.textContent = "Due: " + _formatDueDate(newDate)
+                parent.replaceChild(element, input)
+
+                stickyObject[property] = newDate
+            }
+        }
+
+        parent.replaceChild(input, element)
+    }
+
     const _createSticky = stickyObject => {
         const sticky = document.createElement("div")
         sticky.className = "sticky"
 
-        const title = document.createElement("div")
-        title.className = "title"
-        title.textContent = stickyObject.title
+        const title = _createTitle(stickyObject.title)
 
-        const description = document.createElement("div")
-        description.className = "description"
-        description.textContent = stickyObject.description
+        const description = _createDescription(stickyObject.description)
 
-        const dueDate = document.createElement("div")
-        dueDate.className = "dueDate"
-        dueDate.textContent = _formatDueDate(stickyObject.dueDate)
+        const dueDate = _createDueDate(stickyObject.dueDate)
 
-        const priority = _createPriority(stickyObject.priority)
+        const isPriority = _createIsPriority(stickyObject.isPriority)
 
         const notes = _createNotes(stickyObject.notes)
 
@@ -133,9 +219,30 @@ const ToDoList = (function () {
         remove.className = "remove"
         remove.textContent = "X"
 
+        title.addEventListener("click", () => {
+            _editText(title, stickyObject, "title")
+        })
+
+        description.addEventListener("click", () => {
+            _editText(description, stickyObject, "description")
+        })
+
+        dueDate.addEventListener("click", () => {
+            _editDueDate(dueDate, stickyObject, "dueDate")
+        })
+
+        notes.addEventListener("click", () => {
+            _editText(notes, stickyObject, "notes")
+        })
+
         isChecked.addEventListener("click", () => {
             stickyObject.toggleIsChecked()
             populateStickies(stickyNotes)
+        })
+
+        isPriority.addEventListener("click", () => {
+            isPriority.classList.toggle("isNotPriority")
+            stickyObject.toggleIsPriority()
         })
 
         remove.addEventListener("click", () => {
@@ -146,7 +253,7 @@ const ToDoList = (function () {
         sticky.appendChild(title)
         sticky.appendChild(description)
         sticky.appendChild(dueDate)
-        sticky.appendChild(priority)
+        sticky.appendChild(isPriority)
         sticky.appendChild(notes)
         sticky.appendChild(isChecked)
         sticky.appendChild(remove)
@@ -154,8 +261,8 @@ const ToDoList = (function () {
         return sticky
     }
 
-    const addSticky = (title, description, dueDate, priority, notes, isChecked) => {
-        const newSticky = new ToDo(title, description, dueDate, priority, notes, isChecked)
+    const _addSticky = (title, description, dueDate, isPriority, notes, isChecked) => {
+        const newSticky = new ToDo(title, description, dueDate, isPriority, notes, isChecked)
         stickyNotes.push(newSticky)
 
         populateStickies(stickyNotes)
@@ -173,22 +280,22 @@ const ToDoList = (function () {
     const _removeChecks = () => {
         let newSticky = []
 
-        for(let i = 0; i < stickyNotes.length; i++) {
+        for (let i = 0; i < stickyNotes.length; i++) {
             let curr = stickyNotes[i]
 
-            if(!curr.isChecked){
+            if (!curr.isChecked) {
                 newSticky.push(curr)
             }
         }
 
-        if(newSticky.length < stickyNotes.length){
+        if (newSticky.length < stickyNotes.length) {
             stickyNotes = newSticky
             populateStickies(stickyNotes)
         }
     }
 
     const _removeAllStickies = () => {
-        while(_stickyContainer.hasChildNodes()){
+        while (_stickyContainer.hasChildNodes()) {
             _stickyContainer.removeChild(_stickyContainer.firstChild)
         }
     }
@@ -209,7 +316,7 @@ const ToDoList = (function () {
         return _stickyContainer
     }
 
-    const loadSideBar = () =>{
+    const loadSideBar = () => {
         const side = document.createElement("div")
         side.id = "sideBar"
 
@@ -219,10 +326,10 @@ const ToDoList = (function () {
 
         const clearChecks = document.createElement("div")
         clearChecks.id = "clearChecks"
-        clearChecks.textContent ="Clear Checked"
+        clearChecks.textContent = "Clear Checked"
 
         addStickyButton.addEventListener("click", () => {
-            addSticky("Title", "Description", new Date(), 0, "Notes", false)
+            _addSticky("Title", "Description", new Date(), false, "Notes", false)
             populateStickies(stickyNotes)
         })
 
@@ -236,7 +343,7 @@ const ToDoList = (function () {
         return side
     }
 
-    return { populateStickies, loadSideBar, addSticky, stickyNotes }
+    return { populateStickies, loadSideBar, stickyNotes }
 
 })()
 
