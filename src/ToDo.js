@@ -151,13 +151,32 @@ const ToDoList = (function () {
 
     const _createIsChecked = isChecked => {
         const isCheckedElement = document.createElement("i")
+
+        const classList = isCheckedElement.classList
+        const solidSquare = "fas fa-check-square"
+        const regularSquare = "far fa-check-square"
+
+        const reg = "far"
+        const sol = "fas"
         
         if(isChecked){
-            isCheckedElement.className = "fas fa-check-square"
-            isCheckedElement.classList.add("checked")
+            isCheckedElement.className = solidSquare
+            classList.add("checked")
+
         } else {
-            isCheckedElement.className = "far fa-check-square"
+            isCheckedElement.className = regularSquare
         }
+
+        isCheckedElement.addEventListener("mouseenter", () => {
+            classList.toggle(reg)
+            classList.toggle(sol)
+        })
+
+        isCheckedElement.addEventListener("mouseleave", () => {
+            classList.toggle(reg)
+            classList.toggle(sol)
+        })
+
 
         // <i class="fas fa-check-square"></i>
         // <i class="far fa-check-square"></i>
