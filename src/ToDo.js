@@ -409,6 +409,25 @@ const ToDoList = (function () {
     const populateProjectsFromStorage = (storedProjects) => {
         projects = storedProjects;
 
+        // Create all stored stickies as new Todo objects to maintain the
+        // methods.
+        for(let i = 0; i < projects.length; i++){
+            let stickyNotes = projects[i].stickies
+            console.log('i')
+            for(let j = 0; j < stickyNotes.length; j++){
+                let currSticky = stickyNotes[j]
+                console.log('j')
+                stickyNotes[j] = new ToDo(
+                    currSticky.title,
+                    currSticky.description,
+                    currSticky.dueDate,
+                    currSticky.isPriority,
+                    currSticky.notes,
+                    currSticky.isChecked
+                )
+            }
+        }
+
         return populateStickies(projects[0].stickies)
     }
 
