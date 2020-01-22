@@ -2,6 +2,32 @@ import { format } from 'date-fns'
 
 const ToDoList = (function () {
 
+    // Storage Function
+    function storageAvailable(type) {
+        var storage;
+        try {
+            storage = window[type];
+            var x = '__storage_test__';
+            storage.setItem(x, x);
+            storage.removeItem(x);
+            return true;
+        }
+        catch (e) {
+            return e instanceof DOMException && (
+                // everything except Firefox
+                e.code === 22 ||
+                // Firefox
+                e.code === 1014 ||
+                // test name field too, because code might not be present
+                // everything except Firefox
+                e.name === 'QuotaExceededError' ||
+                // Firefox
+                e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+                // acknowledge QuotaExceededError only if there's something already stored
+                (storage && storage.length !== 0);
+        }
+    }
+
     class ToDo {
         constructor(title, description, dueDate, isPriority, notes, isChecked) {
             this.title = title
@@ -19,55 +45,6 @@ const ToDoList = (function () {
         toggleIsPriority() {
             this.isPriority = !this.isPriority
         }
-
-        get title() {
-            return this._title
-        }
-
-        get description() {
-            return this._description
-        }
-
-        get dueDate() {
-            return this._dueDate
-        }
-
-        get isPriority() {
-            return this._isPriority
-        }
-
-        get notes() {
-            return this._notes
-        }
-
-        get isChecked() {
-            return this._isChecked
-        }
-
-        set title(value) {
-            this._title = value
-        }
-
-        set description(value) {
-            this._description = value
-        }
-
-        set dueDate(value) {
-            this._dueDate = value
-        }
-
-        set isPriority(value) {
-            this._isPriority = value
-        }
-
-        set notes(value) {
-            this._notes = value
-        }
-
-        set isChecked(value) {
-            this._isChecked = value
-        }
-
     }
 
     let projects = []
@@ -83,7 +60,9 @@ const ToDoList = (function () {
         new Date(),
         true,
         "You can click on any part of a post it to edit it! Just hit enter to save :)",
-        false)
+        false
+    )
+
 
     const _createTitle = title => {
         const titleElement = document.createElement("div")
@@ -220,16 +199,20 @@ const ToDoList = (function () {
 
         input.onkeypress = function (e) {
             // if user hits enter
-            if (_checkInput(e) && !_isEmpty(input)) {
-                element.textContent = input.value
-                parent.replaceChild(element, input)
+            if (_checkInput(e)) {
+                if (!_isEmpty(input)) {
+                    element.textContent = input.value
+                    parent.replaceChild(element, input)
 
-                stickyObject[property] = element.textContent
-            } else if (_checkInput(e) && _isEmpty(input)) {
-                element.textContent = `No ${property}`
-                parent.replaceChild(element, input)
+                    stickyObject[property] = element.textContent
+                } else {
+                    element.textContent = `No ${property}`
+                    parent.replaceChild(element, input)
 
-                stickyObject[property] = element.textContent
+                    stickyObject[property] = element.textContent
+                }
+
+                populateStickies(_stickyNotes)
             }
         }
 
@@ -255,17 +238,21 @@ const ToDoList = (function () {
 
         input.onkeypress = function (e) {
             // if user hits enter
-            if (_checkInput(e) && !_isEmpty(input)) {
-                const newDate = _parseDate(input.value)
-                element.textContent = "Due: " + _formatDueDate(newDate)
-                parent.replaceChild(element, input)
+            if (_checkInput(e)) {
+                if (!_isEmpty(input)) {
+                    const newDate = _parseDate(input.value)
+                    element.textContent = "Due: " + _formatDueDate(newDate)
+                    parent.replaceChild(element, input)
 
-                stickyObject[property] = newDate
-            } else if (_checkInput(e) && _isEmpty(input)) {
-                element.textContent = _NO_DUE_DATE
-                parent.replaceChild(element, input)
+                    stickyObject[property] = newDate
+                } else {
+                    element.textContent = _NO_DUE_DATE
+                    parent.replaceChild(element, input)
 
-                stickyObject[property] = _NO_DUE_DATE
+                    stickyObject[property] = _NO_DUE_DATE
+                }
+
+                populateStickies(_stickyNotes)
             }
         }
 
@@ -329,6 +316,7 @@ const ToDoList = (function () {
         isPriority.addEventListener("click", () => {
             isPriority.classList.toggle("isNotPriority")
             stickyObject.toggleIsPriority()
+            populateStickies(_stickyNotes)
         })
 
         remove.addEventListener("click", () => {
@@ -386,6 +374,15 @@ const ToDoList = (function () {
         }
     }
 
+    const _populateStorage = () => {
+        localStorage.clear()
+
+        for (let i = 0; i < projects.length; i++) {
+            localStorage.setItem(i, JSON.stringify(projects[i]))
+            console.log('stored' + JSON.stringify(projects[i]))
+        }
+    }
+
     const populateStickies = (stickies) => {
         _removeAllStickies()
 
@@ -393,6 +390,8 @@ const ToDoList = (function () {
             _stickyNotes = [_defaultSticky]
             stickies = _stickyNotes
             _addProject("Default", stickies)
+        } else {
+            _stickyNotes = stickies
         }
 
         for (let i = 0; i < stickies.length; i++) {
@@ -400,7 +399,17 @@ const ToDoList = (function () {
             _stickyContainer.appendChild(sticky)
         }
 
+        if (storageAvailable('localStorage')) {
+            _populateStorage()
+        }
+
         return _stickyContainer
+    }
+
+    const populateProjectsFromStorage = (storedProjects) => {
+        projects = storedProjects;
+
+        return populateStickies(projects[0].stickies)
     }
 
     const _createSideBarItem = (id, title, icon) => {
@@ -525,10 +534,10 @@ const ToDoList = (function () {
             input.type = "text"
             input.placeholder = "Enter your title!"
             input.id = "newProjectId"
-            
+
             input.onkeypress = function (e) {
                 // if user hits enter
-                if(_checkInput(e) && !_isEmpty(input)){
+                if (_checkInput(e) && !_isEmpty(input)) {
                     _addProject(input.value, [])
 
                     let newProject = projects[projects.length - 1]
@@ -536,7 +545,7 @@ const ToDoList = (function () {
 
                     document.body.removeChild(parent)
                     populateStickies(_stickyNotes)
-                } 
+                }
 
                 // do nothing if it's empty :/
             }
@@ -657,7 +666,7 @@ const ToDoList = (function () {
         return side
     }
 
-    return { populateStickies, loadSideBar, projects }
+    return { populateProjectsFromStorage, populateStickies, loadSideBar, projects, storageAvailable }
 
 })()
 
