@@ -121,7 +121,7 @@ const ToDoList = (function () {
         isPriorityIcon.className = "fas fa-exclamation-circle"
 
         if(!isPriority){
-            _isPriorityElement.classList.add("isNotPriority")
+            isPriorityElement.classList.add("isNotPriority")
         }
 
         isPriorityElement.appendChild(isPriorityIcon)
