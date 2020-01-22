@@ -70,7 +70,8 @@ const ToDoList = (function () {
 
     }
 
-    let stickyNotes = []
+    let projects = []
+    let _stickyNotes = []
     const _stickyContainer = document.createElement("div")
     _stickyContainer.id = "container"
 
@@ -322,7 +323,7 @@ const ToDoList = (function () {
 
         isChecked.addEventListener("click", () => {
             stickyObject.toggleIsChecked()
-            populateStickies(stickyNotes)
+            populateStickies(_stickyNotes)
         })
 
         isPriority.addEventListener("click", () => {
@@ -332,7 +333,7 @@ const ToDoList = (function () {
 
         remove.addEventListener("click", () => {
             _removeSticky(stickyObject)
-            populateStickies(stickyNotes)
+            populateStickies(_stickyNotes)
         })
 
         sticky.appendChild(title)
@@ -348,15 +349,15 @@ const ToDoList = (function () {
 
     const _addSticky = (title, description, dueDate, isPriority, notes, isChecked) => {
         const newSticky = new ToDo(title, description, dueDate, isPriority, notes, isChecked)
-        stickyNotes.push(newSticky)
+        _stickyNotes.push(newSticky)
 
-        populateStickies(stickyNotes)
+        populateStickies(_stickyNotes)
     }
 
     const _removeSticky = sticky => {
-        for (let i = 0; i < stickyNotes.length; i++) {
-            if (stickyNotes[i] === sticky) {
-                stickyNotes.splice(i, 1)
+        for (let i = 0; i < _stickyNotes.length; i++) {
+            if (_stickyNotes[i] === sticky) {
+                _stickyNotes.splice(i, 1)
                 return
             }
         }
@@ -365,17 +366,17 @@ const ToDoList = (function () {
     const _removeChecks = () => {
         let newSticky = []
 
-        for (let i = 0; i < stickyNotes.length; i++) {
-            let curr = stickyNotes[i]
+        for (let i = 0; i < _stickyNotes.length; i++) {
+            let curr = _stickyNotes[i]
 
             if (!curr.isChecked) {
                 newSticky.push(curr)
             }
         }
 
-        if (newSticky.length < stickyNotes.length) {
-            stickyNotes = newSticky
-            populateStickies(stickyNotes)
+        if (newSticky.length < _stickyNotes.length) {
+            _stickyNotes = newSticky
+            populateStickies(_stickyNotes)
         }
     }
 
@@ -389,8 +390,9 @@ const ToDoList = (function () {
         _removeAllStickies()
 
         if (stickies === undefined) {
-            stickyNotes = [_defaultSticky]
-            stickies = stickyNotes
+            _stickyNotes = [_defaultSticky]
+            stickies = _stickyNotes
+            _addProject("Default", stickies)
         }
 
         for (let i = 0; i < stickies.length; i++) {
@@ -448,8 +450,122 @@ const ToDoList = (function () {
         return credit
     }
 
+    const _addProject = (title, stickies) => {
+        projects.push({ title: title, stickies: stickies })
+    }
+
+    const _removeProject = (project) => {
+        let newProjects = []
+
+        for (let i = 0; i < projects.length; i++) {
+            if (project !== projects[i]) {
+                newProjects.push(projects[i])
+            }
+        }
+
+        projects = newProjects
+    }
+
+    const _loadInProjects = window => {
+        const parent = window.parentNode
+
+        const close = document.createElement("i")
+        close.className = "fas fa-window-close"
+        close.id = "closeProjects"
+
+        const projectsContainer = document.createElement("div")
+        projectsContainer.id = "projectsContainer"
+
+        for (let i = 0; i < projects.length; i++) {
+            const projectElement = document.createElement("div")
+            const projectElementText = document.createElement("span")
+            projectElement.className = "project"
+
+            const title = projects[i].title
+            const truncTitle = title.length > 25 ? title.substring(0, 20) + "..." : title
+
+            projectElementText.textContent = truncTitle
+
+            const projectElementIcon = document.createElement("i")
+            projectElementIcon.className = "fas fa-trash"
+
+            projectElement.addEventListener("click", () => {
+                populateStickies(projects[i].stickies)
+                _stickyNotes = projects[i].stickies
+            })
+
+            projectElementIcon.addEventListener("click", () => {
+                _removeProject(projects[i])
+                document.body.removeChild(parent)
+                _openProjectsWindow()
+            })
+
+            projectElement.appendChild(projectElementText)
+            projectElement.appendChild(projectElementIcon)
+            projectsContainer.appendChild(projectElement)
+        }
+
+        if (projects.length == 0) {
+            _addProject("Default", [_defaultSticky])
+        }
+
+        const newProjectElement = document.createElement("div")
+        newProjectElement.className = "newProject"
+        const newProjectIcon = document.createElement("i")
+        newProjectIcon.className = "fas fa-plus"
+        const newProjectText = document.createElement("span")
+        newProjectText.textContent = "New Project"
+
+        close.addEventListener("click", () => {
+            document.body.removeChild(parent)
+        })
+
+        newProjectElement.addEventListener("click", () => {
+            const input = document.createElement("input")
+            input.type = "text"
+            input.placeholder = "Enter your title!"
+            input.id = "newProjectId"
+            
+            input.onkeypress = function (e) {
+                // if user hits enter
+                if(_checkInput(e) && !_isEmpty(input)){
+                    _addProject(input.value, [])
+
+                    let newProject = projects[projects.length - 1]
+                    _stickyNotes = newProject.stickies
+
+                    document.body.removeChild(parent)
+                    populateStickies(_stickyNotes)
+                } 
+
+                // do nothing if it's empty :/
+            }
+
+            projectsContainer.replaceChild(input, newProjectElement)
+
+            document.getElementById(input.id).focus()
+        })
+
+        newProjectElement.appendChild(newProjectIcon)
+        newProjectElement.appendChild(newProjectText)
+        projectsContainer.appendChild(newProjectElement)
+
+        window.appendChild(close)
+        window.appendChild(projectsContainer)
+    }
+
     const _openProjectsWindow = () => {
-        console.log("open projects window")
+        const projectsOverlay = document.createElement("div")
+        projectsOverlay.id = "projectsOverlay"
+
+        const projectsWindow = document.createElement("div")
+        projectsWindow.id = "projectsWindow"
+
+        projectsOverlay.appendChild(projectsWindow)
+
+        _loadInProjects(projectsWindow)
+
+        document.body.appendChild(projectsOverlay)
     }
 
     const _sortPriority = (stickies) => {
@@ -507,7 +623,7 @@ const ToDoList = (function () {
 
         addStickyButton.addEventListener("click", () => {
             _addSticky("Title", "Description", new Date(), false, "Notes", false)
-            populateStickies(stickyNotes)
+            populateStickies(_stickyNotes)
         })
 
         clearChecks.addEventListener("click", () => {
@@ -519,12 +635,12 @@ const ToDoList = (function () {
         })
 
         sortPriority.addEventListener("click", () => {
-            const sorted = _sortPriority(stickyNotes)
+            const sorted = _sortPriority(_stickyNotes)
             populateStickies(sorted)
         })
 
         sortChecked.addEventListener("click", () => {
-            const sorted = _sortChecked(stickyNotes)
+            const sorted = _sortChecked(_stickyNotes)
             populateStickies(sorted)
         })
 
@@ -541,7 +657,7 @@ const ToDoList = (function () {
         return side
     }
 
-    return { populateStickies, loadSideBar, stickyNotes }
+    return { populateStickies, loadSideBar, projects }
 
 })()
 
