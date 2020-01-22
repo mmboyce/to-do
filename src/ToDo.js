@@ -274,6 +274,18 @@ const ToDoList = (function () {
         document.getElementById(id).focus()
     }
 
+    const _createRemove = () => {
+        const remove = document.createElement("div")
+        
+        remove.className = "remove"
+        const icon = document.createElement("i")
+        icon.className = "fas fa-window-close"
+
+        remove.appendChild(icon)
+
+        return remove
+    }
+
     const _createSticky = stickyObject => {
         const sticky = document.createElement("div")
         sticky.className = "sticky"
@@ -290,9 +302,7 @@ const ToDoList = (function () {
 
         const isChecked = _createIsChecked(stickyObject.isChecked)
 
-        const remove = document.createElement("div")
-        remove.className = "remove"
-        remove.textContent = "X"
+        const remove = _createRemove()
 
         title.addEventListener("click", () => {
             _editText(title, stickyObject, "title")
