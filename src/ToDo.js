@@ -411,10 +411,10 @@ const ToDoList = (function () {
 
         // Create all stored stickies as new Todo objects to maintain the
         // methods.
-        for(let i = 0; i < projects.length; i++){
+        for (let i = 0; i < projects.length; i++) {
             let stickyNotes = projects[i].stickies
             console.log('i')
-            for(let j = 0; j < stickyNotes.length; j++){
+            for (let j = 0; j < stickyNotes.length; j++) {
                 let currSticky = stickyNotes[j]
                 console.log('j')
                 stickyNotes[j] = new ToDo(
