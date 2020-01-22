@@ -116,11 +116,11 @@ const ToDoList = (function () {
     const _createIsPriority = isPriority => {
         const isPriorityElement = document.createElement("div")
         isPriorityElement.className = "isPriority"
-        
+
         const isPriorityIcon = document.createElement("i")
         isPriorityIcon.className = "fas fa-exclamation-circle"
 
-        if(!isPriority){
+        if (!isPriority) {
             isPriorityElement.classList.add("isNotPriority")
         }
 
@@ -162,8 +162,8 @@ const ToDoList = (function () {
 
         const reg = "far"
         const sol = "fas"
-        
-        if(isChecked){
+
+        if (isChecked) {
             isCheckedElement.className = solidSquare
             classList.add("checked")
 
@@ -276,7 +276,7 @@ const ToDoList = (function () {
 
     const _createRemove = () => {
         const remove = document.createElement("div")
-        
+
         remove.className = "remove"
         const icon = document.createElement("i")
         icon.className = "fas fa-window-close"
@@ -405,7 +405,7 @@ const ToDoList = (function () {
         const element = document.createElement("div")
         let faIcon = undefined;
 
-        if(icon !== undefined){
+        if (icon !== undefined) {
             faIcon = document.createElement("i")
             faIcon.className = icon
             faIcon.id = id + "Icon"
@@ -415,7 +415,7 @@ const ToDoList = (function () {
         text.textContent = title
         text.id = id + "Text"
 
-        if(faIcon !== undefined){
+        if (faIcon !== undefined) {
             element.appendChild(faIcon)
         }
 
@@ -448,13 +448,27 @@ const ToDoList = (function () {
         return credit
     }
 
+    const _openProjectsWindow = () => {
+        console.log("open projects window")
+    }
+
+    const _sortPriority = (stickies) => {
+        return stickies.sort((a, b) => {
+            return a.isPriority < b.isPriority
+        })
+    }
+
+    const _sortChecked = (stickies) => {
+        console.log("sort checked")
+    }
+
     const loadSideBar = () => {
         const side = document.createElement("div")
         side.id = "sideBar"
 
         const addStickyButton = _createSideBarItem("addStickyButton", "Add To-Do", "fas fa-plus-circle")
 
-        const  projects = _createSideBarItem("projects", "Projects", "fas fa-folder")
+        const projects = _createSideBarItem("projects", "Projects", "fas fa-folder")
 
         const dividerClear = _createSideBarDivider("Clear")
 
@@ -477,6 +491,19 @@ const ToDoList = (function () {
 
         clearChecks.addEventListener("click", () => {
             _removeChecks()
+        })
+
+        projects.addEventListener("click", () => {
+            _openProjectsWindow()
+        })
+
+        sortPriority.addEventListener("click", () => {
+            const sorted = _sortPriority(stickyNotes)
+            populateStickies(sorted)
+        })
+
+        sortChecked.addEventListener("click", () => {
+            _sortChecked()
         })
 
         side.appendChild(addStickyButton)

@@ -92,8 +92,9 @@ body {
 .dueDate {
     font-size: 1.25em;
     order: 2;
-    flex: 1 0 85%;
+    flex: 1 0 30%;
     align-self: flex-start;
+    margin-right: 55%;
 }
 
 .notes {
@@ -196,6 +197,14 @@ body {
 .sideItem:hover {
     background: #dddddd;
     color: teal;
+}
+
+.sticky input {
+    border: 0;
+    background: #cfcf01;
+    padding: 2px;
+    border-radius: 6px;
+    color: white;
 }
 
 @media only screen and (max-width: 600px) {
