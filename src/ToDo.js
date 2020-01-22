@@ -387,17 +387,74 @@ const ToDoList = (function () {
         return _stickyContainer
     }
 
+    const _createSideBarItem = (id, title, icon) => {
+        const element = document.createElement("div")
+        let faIcon = undefined;
+
+        if(icon !== undefined){
+            faIcon = document.createElement("i")
+            faIcon.className = icon
+            faIcon.id = id + "Icon"
+        }
+
+        const text = document.createElement("span")
+        text.textContent = title
+        text.id = id + "Text"
+
+        if(faIcon !== undefined){
+            element.appendChild(faIcon)
+        }
+
+        element.appendChild(text)
+        element.className = "sideItem"
+
+        return element
+    }
+
+    const _createSideBarDivider = title => {
+        const element = document.createElement("div")
+
+        element.id = "divider" + title
+        element.className = "divier"
+
+        return element
+    }
+
+    const _createSideBarCredit = () => {
+        const credit = document.createElement("div")
+        credit.id = "credit"
+        credit.textContent = "Created by "
+        const link = document.createElement("a")
+        link.href = "http://mmboyce.github.io"
+        link.textContent = "W Mathieu Mimms-Boyce"
+        credit.appendChild(document.createElement("br"))
+        credit.appendChild(link)
+        credit.className = "sideItem"
+
+        return credit
+    }
+
     const loadSideBar = () => {
         const side = document.createElement("div")
         side.id = "sideBar"
 
-        const addStickyButton = document.createElement("div")
-        addStickyButton.id = "addSticky"
-        addStickyButton.textContent = "+"
+        const addStickyButton = _createSideBarItem("addStickyButton", "Add To-Do", "fas fa-plus-circle")
 
-        const clearChecks = document.createElement("div")
-        clearChecks.id = "clearChecks"
-        clearChecks.textContent = "Clear Checked"
+        const  projects = _createSideBarItem("projects", "Projects", "fas fa-folder")
+
+        const dividerClear = _createSideBarDivider("Clear")
+
+        const clearChecks = _createSideBarItem("clearChecks", "Clear Checks", "fas fa-times-circle")
+
+        const dividerSort = _createSideBarDivider("Sort")
+
+        const sortPriority = _createSideBarItem("sortPriority", "Sort Priority", "fas fa-exclamation-circle")
+
+        const sortChecked = _createSideBarItem("sortChecked", "Sort Checked", "fas fa-check-square")
+
+        const dividerCredit = _createSideBarDivider("Credit")
+
+        const credit = _createSideBarCredit()
 
         addStickyButton.addEventListener("click", () => {
             _addSticky("Title", "Description", new Date(), false, "Notes", false)
@@ -409,7 +466,14 @@ const ToDoList = (function () {
         })
 
         side.appendChild(addStickyButton)
+        side.appendChild(projects)
+        side.appendChild(dividerClear)
         side.appendChild(clearChecks)
+        side.appendChild(dividerSort)
+        side.appendChild(sortPriority)
+        side.appendChild(sortChecked)
+        side.appendChild(dividerCredit)
+        side.appendChild(credit)
 
         return side
     }
