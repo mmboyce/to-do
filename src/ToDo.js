@@ -454,12 +454,33 @@ const ToDoList = (function () {
 
     const _sortPriority = (stickies) => {
         return stickies.sort((a, b) => {
-            return a.isPriority < b.isPriority
+            // sooner and priority gets higher placement
+            if (a.isPriority && !b.isPriority) {
+                return -1
+            } else if (!a.isPriority && b.isPriority) {
+                return 1
+            }
+
+            // if both are priority, or neither, sort by sooner date
+            return a.dueDate.getTime() > b.dueDate.getTime()
         })
     }
 
     const _sortChecked = (stickies) => {
-        console.log("sort checked")
+        const now = new Date()
+
+        return stickies.sort((a, b) => {
+            // further and checked gets higher placement
+            if (a.isChecked && !b.isChecked) {
+                return -1
+            } else if (!a.isChecked && b.isChecked) {
+                return 1
+            }
+
+            // if both are done, or neither, sort by furthes date from now
+            return (now.getTime() - a.dueDate.getTime()) < (
+                now.getTime() - b.dueDate.getTime())
+        })
     }
 
     const loadSideBar = () => {
@@ -503,7 +524,8 @@ const ToDoList = (function () {
         })
 
         sortChecked.addEventListener("click", () => {
-            _sortChecked()
+            const sorted = _sortChecked(stickyNotes)
+            populateStickies(sorted)
         })
 
         side.appendChild(addStickyButton)
