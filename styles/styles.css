@@ -14,6 +14,7 @@ body {
     grid-auto-flow: row dense;
     width: 75%;
     margin-left: 10em;
+    grid-template-columns: 700px 300px;
 }
 
 .empty {
@@ -25,16 +26,13 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 8%;
     background-color: whitesmoke;
     top: 0;
     left: 0;
     margin: 0;
     margin-right: 1em;
     box-shadow: 2px 0 6px black;
-}
-
-#sideBar div {
-    margin: 1em;
 }
 
 .sticky {
@@ -49,7 +47,7 @@ body {
     box-shadow: 0.5em 0.5em red;
 }
 
-.title:hover, .isPriority:hover, .dueDate:hover, .description:hover, .isChecked:hover, .notes:hover, .remove:hover, #addSticky:hover, #clearChecks:hover {
+.title:hover, .isPriority:hover, .dueDate:hover, .description:hover, .isChecked:hover, .notes:hover, .remove:hover, .sideItem:hover {
     cursor: pointer;
 }
 
@@ -148,6 +146,60 @@ body {
 
 .remove:hover {
     background: red;
+}
+
+#credit {
+    font-weight: bold;
+}
+
+#credit:hover {
+    cursor: auto;
+}
+
+#credit a, #credit:visited {
+    color: firebrick;
+    text-decoration: none;
+}
+
+#credit a:hover {
+    color: red;
+}
+
+#dividerCredit {
+    flex: 0 0 64.5%;
+}
+
+#sideBar .fas {
+    font-size: 1.4em;
+    border-radius: 5px;
+    align-self: center;
+}
+
+#sideBar span {
+    margin-left: 0.7em;
+}
+
+#addStickyButtonText {
+    margin: 0;
+    padding: 0;
+    align-self: center;
+}
+
+#dividerClear, #dividerSort {
+    flex: 0 0 2%;
+}
+
+.divider {
+    box-shadow: 0px 0px 5px #dddddd;
+}
+
+.sideItem {
+    padding: 0.6em;
+}
+
+.sideItem:hover {
+    background: #dddddd;
+    color: teal;
 }
 
 @media only screen and (max-width: 600px) {
