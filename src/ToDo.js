@@ -493,7 +493,7 @@ const ToDoList = (function () {
 
         const dividerClear = _createSideBarDivider("Clear")
 
-        const clearChecks = _createSideBarItem("clearChecks", "Clear Done", "fas fa-times-circle")
+        const clearChecks = _createSideBarItem("clearChecks", "Clear Checked", "fas fa-times-circle")
 
         const dividerSort = _createSideBarDivider("Sort")
 
