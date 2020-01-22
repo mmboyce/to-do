@@ -116,11 +116,15 @@ const ToDoList = (function () {
     const _createIsPriority = isPriority => {
         const isPriorityElement = document.createElement("div")
         isPriorityElement.className = "isPriority"
-        isPriorityElement.textContent = "!"
+        
+        const isPriorityIcon = document.createElement("i")
+        isPriorityIcon.className = "fas fa-exclamation-circle"
 
-        if (!isPriority) {
-            isPriorityElement.classList.toggle("isNotPriority")
+        if(!isPriority){
+            _isPriorityElement.classList.add("isNotPriority")
         }
+
+        isPriorityElement.appendChild(isPriorityIcon)
 
         return isPriorityElement
     }
