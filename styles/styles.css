@@ -40,10 +40,11 @@ html, body {
     display: flex;
     flex-direction: row-reverse;
     flex-wrap: wrap;
+    box-sizing: border-box;
     background: yellow;
-    padding: 5vh 2vw;
-    width: 16vw;
-    height: 30vh;
+    padding: 2vh 2vw;
+    width: 19vw;
+    height: 36vh;
     margin: 80%;
     box-shadow: 0.75rem 0.75rem red;
 }
@@ -268,6 +269,7 @@ span#clearChecksText {
 }
 
 .project, .newProject {
+    box-sizing: border-box;
     padding: 7.1%;
     width: 100%;
 }
@@ -304,6 +306,8 @@ span#clearChecksText {
     background: whitesmoke;
 }
 
+/* Phone Styling */
+
 @media only screen and (max-width: 600px) {
     #content {
         flex-direction: column;
@@ -321,9 +325,10 @@ span#clearChecksText {
         grid-template-columns: 5vw;
     }
     .sticky {
-        padding: 1.2em 1em;
+        box-sizing: border-box;
+        padding: 3vh 4vw;
         width: 75vw;
-        height: 45vh;
+        height: 49vh;
         margin-left: 150%;
     }
     .notes {
@@ -340,5 +345,43 @@ span#clearChecksText {
         height: 400px;
         left: 20%;
         top: 20%;
+    }
+}
+
+/* Tablet styling landscape */
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+    #container {
+        width: 100%;
+        grid-template-columns: 2vw 2vw;
+        grid-column-gap: 37vw;
+    }
+    .sticky {
+        box-sizing: border-box;
+        padding: 2vh 2vw;
+        width: 35vw;
+        height: 50vh;
+        margin-left: 150%;
+    }
+}
+
+/* Tablet styling portrait */
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    #container {
+        width: 100%;
+        grid-template-columns: 1vw;
+        grid-row-gap: 3vh;
+        margin-left: 28vw;
+        margin-top: 2vh;
+    }
+    .sticky {
+        box-sizing: border-box;
+        padding: 2vh 2vw;
+        width: 60vw;
+        height: 45vh;
+    }
+    #sideBar {
+        width: 20%;
     }
 }
