@@ -90,7 +90,7 @@ html, body {
     margin-bottom: 4%;
     flex: 0 0 100%;
     align-self: flex-start;
-    max-height: 200%;
+    max-height: 24%;
 }
 
 .description {
@@ -98,7 +98,7 @@ html, body {
     order: 3;
     flex: 0 0 100%;
     align-self: flex-start;
-    max-height: 260%;
+    max-height: 17%;
 }
 
 .dueDate {
@@ -115,7 +115,7 @@ html, body {
     font-size: 115%;
     align-self: flex-start;
     flex: 0 0 100%;
-    max-height: 260%;
+    max-height: 15%;
 }
 
 .isChecked {
