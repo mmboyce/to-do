@@ -198,10 +198,6 @@ html, body {
     height: 3%;
 }
 
-.divider {
-    box-shadow: 0px 0px 5px #dddddd;
-}
-
 .sideItem {
     padding: 6%;
 }
@@ -333,7 +329,7 @@ span#clearChecksText {
     .notes {
         max-height: 3.7em;
     }
-    .divier, #credit {
+    .divider, #credit {
         display: none;
     }
     .sideItem span {

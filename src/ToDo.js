@@ -450,7 +450,7 @@ const ToDoList = (function () {
     const element = document.createElement('div')
 
     element.id = 'divider' + title
-    element.className = 'divier'
+    element.className = 'divider'
 
     return element
   }
