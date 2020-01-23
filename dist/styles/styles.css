@@ -77,6 +77,8 @@ body {
     overflow-y: scroll;
     overflow-x: hidden;
     border-bottom: 2px solid gray;
+    /* Firefox on windows looks a little ugly if we don't set scrollbar-width to none. */
+    scrollbar-width: none;
 }
 
 .title {
