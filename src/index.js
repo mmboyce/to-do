@@ -1,30 +1,26 @@
 import ToDoList from './ToDo'
 
-const content = document.querySelector("#content")
+const content = document.querySelector('#content')
 
 content.appendChild(ToDoList.loadSideBar())
 
 if (ToDoList.storageAvailable('localStorage') && localStorage.length > 0) {
-    const newProjects = []
+  const newProjects = []
 
-    for (let i = 0; i < localStorage.length; i++) {
-        let item = localStorage.getItem(i)
-        let parsedItem = JSON.parse(item)
+  for (let i = 0; i < localStorage.length; i++) {
+    const item = localStorage.getItem(i)
+    const parsedItem = JSON.parse(item)
 
-        for (let i = 0; i < parsedItem.stickies.length; i++) {
-            if (parsedItem.stickies[i].dueDate !== "No Due Date") {
-                parsedItem.stickies[i].dueDate = new Date(parsedItem.stickies[i].dueDate)
-            }
-        }
-
-        console.log(parsedItem)
-
-        newProjects.push(parsedItem)
+    for (let i = 0; i < parsedItem.stickies.length; i++) {
+      if (parsedItem.stickies[i].dueDate !== 'No Due Date') {
+        parsedItem.stickies[i].dueDate = new Date(parsedItem.stickies[i].dueDate)
+      }
     }
 
-    content.appendChild(ToDoList.populateProjectsFromStorage(newProjects))
+    newProjects.push(parsedItem)
+  }
+
+  content.appendChild(ToDoList.populateProjectsFromStorage(newProjects))
 } else {
-    content.appendChild(ToDoList.populateStickies())
+  content.appendChild(ToDoList.populateStickies())
 }
-
-
