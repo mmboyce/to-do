@@ -13,8 +13,9 @@ body {
     display: grid;
     grid-auto-flow: row dense;
     width: 75%;
-    margin-left: 10em;
-    grid-template-columns: 700px 300px;
+    margin-left: 14em;
+    grid-template-columns: 500px 500px 500px;
+    grid-column-gap: 76px;
 }
 
 .empty {
@@ -40,10 +41,10 @@ body {
     flex-wrap: wrap;
     background: yellow;
     padding: 3em 2em;
-    width: 600px;
-    height: 240px;
+    width: 350px;
+    height: 300px;
     margin: 1em;
-    box-shadow: 0.5em 0.5em red;
+    box-shadow: 0.75em 0.75em red;
 }
 
 .title:hover, .isPriority:hover, .dueDate:hover, .description:hover, .isChecked:hover, .notes:hover, .remove:hover, .sideItem:hover {
@@ -72,6 +73,12 @@ body {
     color: red;
 }
 
+.title, .description, .notes {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-bottom: 2px solid gray;
+}
+
 .title {
     order: 3;
     font-size: 2em;
@@ -79,6 +86,7 @@ body {
     margin-bottom: 0.6em;
     flex: 0 0 100%;
     align-self: flex-start;
+    max-height: 2em;
 }
 
 .description {
@@ -86,6 +94,7 @@ body {
     order: 3;
     flex: 0 0 100%;
     align-self: flex-start;
+    max-height: 2.6em;
 }
 
 .dueDate {
@@ -102,6 +111,7 @@ body {
     font-size: 1.15em;
     align-self: flex-start;
     flex: 0 0 100%;
+    max-height: 2.6em;
 }
 
 .isChecked {
@@ -306,11 +316,31 @@ span#clearChecksText {
         box-shadow: 0 2px 6px black;
     }
     #container {
-        margin-top: 5em;
-        margin-left: 1em;
-        width: 80%;
+        margin: 5em auto 0 auto;
+        width: 95%;
+        grid-template-columns: 400px;
     }
     .sticky {
         padding: 1.2em 1em;
+        width: 265px;
+        height: 330px;
+    }
+    .notes {
+        max-height: 3.7em;
+    }
+    .divier, #credit {
+        display: none;
+    }
+    .sideItem span {
+        display: none;
+    }
+    .sideItem {
+        margin: 1em;
+    }
+    #projectsWindow {
+        width: 250px;
+        height: 400px;
+        left: 20%;
+        top: 20%;
     }
 }
