@@ -4,6 +4,10 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
+html, body {
+    margin: 0;
+}
+
 #content {
     display: flex;
     flex-direction: row;
@@ -12,10 +16,11 @@ body {
 #container {
     display: grid;
     grid-auto-flow: row dense;
-    width: 75%;
-    margin-left: 14em;
-    grid-template-columns: 500px 500px 500px;
-    grid-column-gap: 76px;
+    width: 100%;
+    grid-template-columns: 1vw 1vw 1vw;
+    grid-column-gap: 25vw;
+    margin-left: 16%;
+    margin-top: 1%;
 }
 
 .empty {
@@ -27,12 +32,8 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 8%;
+    width: 9%;
     background-color: whitesmoke;
-    top: 0;
-    left: 0;
-    margin: 0;
-    margin-right: 1em;
 }
 
 .sticky {
@@ -40,11 +41,11 @@ body {
     flex-direction: row-reverse;
     flex-wrap: wrap;
     background: yellow;
-    padding: 3em 2em;
-    width: 350px;
-    height: 300px;
-    margin: 1em;
-    box-shadow: 0.75em 0.75em red;
+    padding: 5vh 2vw;
+    width: 16vw;
+    height: 30vh;
+    margin: 80%;
+    box-shadow: 0.75rem 0.75rem red;
 }
 
 .title:hover, .isPriority:hover, .dueDate:hover, .description:hover, .isChecked:hover, .notes:hover, .remove:hover, .sideItem:hover {
@@ -53,12 +54,12 @@ body {
 
 .isPriority {
     color: red;
-    font-size: 2.2em;
+    font-size: 200%;
     order: 1;
     flex: 0 0 5%;
     text-align: center;
     align-self: baseline;
-    margin-right: 10px;
+    margin-right: 3%;
 }
 
 .isPriority:hover {
@@ -83,37 +84,37 @@ body {
 
 .title {
     order: 3;
-    font-size: 2em;
+    font-size: 200%;
     font-weight: bold;
-    margin-bottom: 0.6em;
+    margin-bottom: 4%;
     flex: 0 0 100%;
     align-self: flex-start;
-    max-height: 2em;
+    max-height: 200%;
 }
 
 .description {
-    font-size: 1.3em;
+    font-size: 130%;
     order: 3;
     flex: 0 0 100%;
     align-self: flex-start;
-    max-height: 2.6em;
+    max-height: 260%;
 }
 
 .dueDate {
-    font-size: 1.25em;
+    font-size: 125%;
     order: 2;
-    flex: 1 0 30%;
+    flex: 1 0 45%;
     align-self: flex-start;
-    margin-right: 55%;
+    margin-right: 35%;
 }
 
 .notes {
-    margin-top: 0.6em;
+    margin-top: 4%;
     order: 4;
-    font-size: 1.15em;
+    font-size: 115%;
     align-self: flex-start;
     flex: 0 0 100%;
-    max-height: 2.6em;
+    max-height: 260%;
 }
 
 .isChecked {
@@ -122,7 +123,7 @@ body {
     align-self: flex-end;
     flex: 0 0 5%;
     color: gray;
-    font-size: 1.5em;
+    font-size: 150%;
 }
 
 .isChecked:hover {
@@ -144,11 +145,11 @@ body {
 
 .remove {
     color: gray;
-    margin-left: 0.2em;
-    font-size: 1.7em;
+    margin-left: 2%;
+    font-size: 170%;
     order: 0;
     flex: 0 0 1%;
-    margin-top: 4px;
+    margin-top: 3px;
     align-self: flex-start;
 }
 
@@ -174,17 +175,17 @@ body {
 }
 
 #dividerCredit {
-    flex: 0 0 60%;
+    height: 100%;
 }
 
 #sideBar .fas {
-    font-size: 1.4em;
+    font-size: 140%;
     border-radius: 5px;
     align-self: center;
 }
 
 #sideBar span {
-    margin-left: 0.7em;
+    margin-left: 7%;
 }
 
 #addStickyButtonText {
@@ -194,7 +195,7 @@ body {
 }
 
 #dividerClear, #dividerSort {
-    flex: 0 0 2%;
+    height: 3%;
 }
 
 .divider {
@@ -202,7 +203,7 @@ body {
 }
 
 .sideItem {
-    padding: 0.6em;
+    padding: 6%;
 }
 
 .sideItem:hover {
@@ -219,7 +220,7 @@ body {
 }
 
 span#clearChecksText {
-    margin-left: 0.5em;
+    margin-left: 5%;
 }
 
 #projectsOverlay {
@@ -250,10 +251,10 @@ span#clearChecksText {
     cursor: pointer;
     flex: 0 0 1%;
     color: gray;
-    font-size: 2.2em;
-    margin-top: 0.4em;
-    margin-left: 0.4em;
-    margin-right: 0.4em;
+    font-size: 220%;
+    margin-top: 4%;
+    margin-left: 4%;
+    margin-right: 4%;
     margin-bottom: auto;
 }
 
@@ -271,7 +272,7 @@ span#clearChecksText {
 }
 
 .project, .newProject {
-    padding: 1.4em;
+    padding: 7.1%;
     width: 100%;
 }
 
@@ -283,7 +284,7 @@ span#clearChecksText {
 .project i {
     margin-left: 10%;
     color: grey;
-    font-size: 1.3em;
+    font-size: 130%;
 }
 
 .project i:hover {
@@ -291,25 +292,26 @@ span#clearChecksText {
 }
 
 .newProject {
-    font-size: 1.2em;
+    font-size: 120%;
     padding-left: 0;
     text-align: center;
 }
 
 .newProject i {
-    margin-right: 1em;
+    margin-right: 6%;
 }
 
 #newProjectId {
     border: 0;
-    margin-left: 0.4em;
-    padding: 1em;
+    margin-left: 4%;
+    padding: 1%;
     background: whitesmoke;
 }
 
 @media only screen and (max-width: 600px) {
     #content {
         flex-direction: column;
+        width: 100vw;
     }
     #sideBar {
         width: 100%;
@@ -318,14 +320,15 @@ span#clearChecksText {
         box-shadow: 0 2px 6px black;
     }
     #container {
-        margin: 5em auto 0 auto;
-        width: 95%;
-        grid-template-columns: 400px;
+        margin: 13vh 0 5vh 0;
+        width: 100%;
+        grid-template-columns: 5vw;
     }
     .sticky {
         padding: 1.2em 1em;
-        width: 265px;
-        height: 330px;
+        width: 75vw;
+        height: 45vh;
+        margin-left: 150%;
     }
     .notes {
         max-height: 3.7em;
@@ -335,9 +338,6 @@ span#clearChecksText {
     }
     .sideItem span {
         display: none;
-    }
-    .sideItem {
-        margin: 1em;
     }
     #projectsWindow {
         width: 250px;
