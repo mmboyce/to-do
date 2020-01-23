@@ -57,7 +57,7 @@ const ToDoList = (function () {
     'Check out my notes to see how to make a sticky note!',
     new Date(),
     true,
-    'You can click on any part of a post it to edit it! Just hit enter to save :)',
+    'Click any part of a ToDo to edit. Just hit enter to save :)',
     false
   )
 
