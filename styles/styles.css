@@ -83,6 +83,12 @@ html, body {
     scrollbar-width: none;
 }
 
+/* hide scrollbar on webkit */
+
+.title::-webkit-scrollbar, .description::-webkit-scrollbar, .notes::-webkit-scrollbar {
+    display: none;
+}
+
 .title {
     order: 3;
     font-size: 200%;
